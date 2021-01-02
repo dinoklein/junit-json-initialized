@@ -28,7 +28,7 @@ public class JsonInitializedProcessor implements Consumer<Object> {
      * Takes a provided test instance, iterates over all fields, and initializes those that are annotated
      * with {@link JsonInitialized}.
      *
-     * @param testInstance
+     * @param testInstance test instance to be processed
      */
     @Override
     @SneakyThrows

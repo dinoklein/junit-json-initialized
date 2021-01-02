@@ -26,8 +26,8 @@ public class JsonProvider implements BeforeAllCallback, BeforeEachCallback {
     /**
      * Initializes our environment by setting up processor to be used on all test instances.
      *
-     * @param context
-     * @throws Exception
+     * @param context JUnit 5 extension context
+     * @throws Exception per interface spec
      */
     @Override
     @SuppressWarnings("unusedThrown")
@@ -41,8 +41,8 @@ public class JsonProvider implements BeforeAllCallback, BeforeEachCallback {
     /** Utilizes the processor setup in {@link #beforeAll(org.junit.jupiter.api.extension.ExtensionContext)}
      * to process a test.
      *
-     * @param context
-     * @throws Exception
+     * @param context JUnit 5 extension context
+     * @throws Exception per interface spec
      */
     @Override
     @SuppressWarnings("unusedThrown")
