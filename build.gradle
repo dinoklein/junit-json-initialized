@@ -3,10 +3,14 @@ plugins {
     id 'java'
     id 'idea'
     id 'jacoco'
+    id 'maven-publish'
+    id 'maven'
+    id 'signing'
 }
 
-group 'net.recalibrate'
-version '1.0-SNAPSHOT'
+group = 'net.recalibrate'
+version = '1.0.0'
+ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
 
 repositories {
     mavenCentral()
@@ -33,6 +37,9 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 test {
@@ -44,7 +51,46 @@ jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'JUnit JSON Initialized'
+                description = 'JUnit 5 extension initialize test fields with JSON, using the Jackson library'
+                url = 'https://github.com/dinoklein/junit-json-initialized'
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/dinoklein/junit-json-initialized'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            //name = 'OSSRH'
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+            url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
+            credentials {
+                username = findProperty('ossrhUsername')
+                password = findProperty('ossrhPassword')
+            }
+        }
+    }
+}
+
+signing {
+    useInMemoryPgpKeys(findProperty('signingKey'), findProperty('signingPassword'))
+    sign publishing.publications.mavenJava
+}
+
+// sign only release versions
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
 }
