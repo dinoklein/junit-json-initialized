@@ -67,6 +67,12 @@ publishing {
                 scm {
                     url = 'https://github.com/dinoklein/junit-json-initialized'
                 }
+                developers {
+                    developer {
+                        id = 'dinoklein'
+                        name = 'Dino Klein'
+                    }
+                }
             }
         }
     }
