@@ -72,20 +72,19 @@ publishing {
     }
     repositories {
         maven {
-            //name = 'OSSRH'
             def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
             def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
             url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
             credentials {
-                username = findProperty('ossrhUsername')
-                password = findProperty('ossrhPassword')
+                username = System.getenv('ossrhUsername')
+                password = System.getenv('ossrhPassword')
             }
         }
     }
 }
 
 signing {
-    useInMemoryPgpKeys(findProperty('signingKey'), findProperty('signingPassword'))
+    useInMemoryPgpKeys(System.getenv('signingKey'), System.getenv('signingPassword'))
     sign publishing.publications.mavenJava
 }
 
